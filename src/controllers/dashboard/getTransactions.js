@@ -9,18 +9,22 @@ const getTransactions = async (req, res) => {
 
     let { userId } = req.params;
 
-    userId = userId.trim()
+    console.log(userId)
 
 
-
-    const joiSchema = Joi.object({
-        userId: Joi.string().required().min(7),
-    })
-    let validEntry = joiSchema.validate({ userId })
-
-    if (!validEntry) return res.status(400).json({ message: "invalid request" })
 
     try {
+
+        const joiSchema = Joi.object({
+            userId: Joi.string().required().min(7),
+        })
+        let validEntry = joiSchema.validate({ userId })
+        console.log(userId, '1st')
+        if (!validEntry) return res.status(400).json({ message: "invalid request" })
+
+        console.log(userId, '2nd')
+        userId = userId.trim()
+
         let user = await getUserById(userId)
         if (!user || user.length < 1 || user.err) return res.status(404).json({ message: 'user not found' })
 
@@ -34,7 +38,7 @@ const getTransactions = async (req, res) => {
         return res.status(200).json({ status: " success", payload: final });
 
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         return res.status(500).json({ message: 'oops! an error occured while getting transactions' })
     }
 };

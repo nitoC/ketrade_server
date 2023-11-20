@@ -10,27 +10,28 @@ const createOrders = async (req, res) => {
     let { userId, value, price, type, currency } = req.body;
     console.log(userId, 'user id orders')
 
-    userId = userId.trim()
-    value = parseFloat(value);
-    price = parseFloat(price);
-    type = type.trim()
-    currency = currency.trim()
-
-
-    const joiSchema = Joi.object({
-        userId: Joi.string().required().min(7),
-        value: Joi.number().positive(),
-        price: Joi.number(),
-        type: Joi.string().valid('buy', 'sell').required(),
-        currency: Joi.string().required()
-    })
-    let validEntry = joiSchema.validate({ userId, value, price, type, currency })
-
-    console.log(validEntry, 'valid')
-
-    if (!validEntry) return res.status(400).json({ message: "invalid request" })
 
     try {
+        const joiSchema = Joi.object({
+            userId: Joi.string().required().min(7),
+            value: Joi.number().positive(),
+            price: Joi.number(),
+            type: Joi.string().valid('buy', 'sell').required(),
+            currency: Joi.string().required()
+        })
+        let validEntry = joiSchema.validate({ userId, value, price, type, currency })
+
+        console.log(validEntry, 'valid')
+
+        if (!validEntry) return res.status(400).json({ message: "invalid request" })
+
+
+        userId = userId.trim()
+        value = parseFloat(value);
+        price = parseFloat(price);
+        type = type.trim()
+        currency = currency.trim()
+
         let user = await getUserById(userId)
         console.log(user, 'user')
 
@@ -65,9 +66,10 @@ const createOrders = async (req, res) => {
 
 // get all orders by user id
 const getOrders = async (req, res) => {
-    const { userId } = req.params
+    let { userId } = req.params
 
     try {
+        userId = userId.trim()
         let user = await getUserById(userId)
 
         if (user.err) throw new Error('server error')
@@ -90,9 +92,10 @@ const getOrders = async (req, res) => {
 
 // get all completed orders by user id
 const getcompletedOrders = async (req, res) => {
-    const { userId } = req.params
+    let { userId } = req.params
 
     try {
+        userId = userId.trim()
         let user = await getUserById(userId)
 
         if (user.err) throw new Error('server error')

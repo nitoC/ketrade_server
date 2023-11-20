@@ -6,32 +6,26 @@ import Joi from "@hapi/joi";
 
 const withdraw = async (req, res) => {
 
-    let { userId, value, plan } = req.body;
+    let { userId, value } = req.body;
 
-    userId = userId.trim()
-    value = parseFloat(value);
-    plan = plan.trim()
 
-    let minimum;
-    if (plan === 'Gold') {
-        minimum = 10
-    }
-    if (plan === 'Diamond') {
-        minimum = 500
-    }
-    if (plan === 'Platinum') {
-        minimum = 1000
-    }
 
-    const joiSchema = Joi.object({
-        userId: Joi.string().required().min(7),
-        value: Joi.number().positive().min(minimum)
-    })
-    let validEntry = joiSchema.validate({ userId, value })
 
-    if (!validEntry) return res.status(400).json({ message: "invalid request" })
 
     try {
+
+        const joiSchema = Joi.object({
+            userId: Joi.string().required().min(7),
+            value: Joi.number().positive().min()
+        })
+        let validEntry = joiSchema.validate({ userId, value })
+
+        if (!validEntry) return res.status(400).json({ message: "invalid request" })
+
+        userId = userId.trim()
+        value = parseFloat(value);
+
+
         let user = await getUserById(userId)
         if (!user || user.length < 1) return res.status(404).json({ message: 'user not found' })
 

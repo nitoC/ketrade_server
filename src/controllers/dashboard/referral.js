@@ -9,23 +9,24 @@ const createReferral = async (req, res) => {
 
     let { referringUserId, referredUserId } = req.body;
 
-    referredUserId = referredUserId.trim()
-    referringUserId = referringUserId.trim();
 
-
-    const joiSchema = Joi.object({
-        referredUserId: Joi.string().required().min(7),
-        referringUserId: Joi.string().required().min(7),
-
-    })
-    let validEntry = joiSchema.validate({
-        referredUserId,
-        referringUserId
-    })
-
-    if (!validEntry) return res.status(400).json({ message: "invalid request" })
 
     try {
+        const joiSchema = Joi.object({
+            referredUserId: Joi.string().required().min(7),
+            referringUserId: Joi.string().required().min(7),
+
+        })
+        let validEntry = joiSchema.validate({
+            referredUserId,
+            referringUserId
+        })
+
+        referredUserId = referredUserId.trim()
+        referringUserId = referringUserId.trim();
+
+        if (!validEntry) return res.status(400).json({ message: "invalid request" })
+
         let user = await getUserById(referringUserId)
 
         if (!user || user.length < 1) return res.status(404).json({ message: 'user not found' })
@@ -50,9 +51,10 @@ const createReferral = async (req, res) => {
 
 // get all orders by user id
 const getReferrals = async (req, res) => {
-    const { userId } = req.params
+    let { userId } = req.params
 
     try {
+        userId = userId.trim()
         let user = await getUserById(userId)
 
         if (user.err) throw new Error('server error')

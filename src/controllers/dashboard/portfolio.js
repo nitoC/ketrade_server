@@ -42,18 +42,16 @@ export const getPortfoliosByType = async (req, res) => {
 
     let { userId, currency } = req.params;
 
-    userId = userId.trim()
-
-
-
-    const joiSchema = Joi.object({
-        userId: Joi.string().required().min(7),
-    })
-    let validEntry = joiSchema.validate({ userId })
-
-    if (!validEntry) return res.status(400).json({ message: "invalid request" })
 
     try {
+        userId = userId.trim()
+
+        const joiSchema = Joi.object({
+            userId: Joi.string().required().min(7),
+        })
+        let validEntry = joiSchema.validate({ userId })
+
+        if (!validEntry) return res.status(400).json({ message: "invalid request" })
         let user = await getUserById(userId)
         if (!user || user.length < 1 || user.err) return res.status(404).json({ message: 'user not found' })
 
@@ -77,20 +75,21 @@ const createPortfolios = async (req, res) => {
 
     let { userId, currency } = req.body;
 
-    userId = userId.trim()
-    currency = plan.trim()
-
-
-
-    const joiSchema = Joi.object({
-        userId: Joi.string().required().min(7),
-        currency: Joi.number().required()
-    })
-    let validEntry = joiSchema.validate({ userId, currency })
-
-    if (!validEntry) return res.status(400).json({ message: "invalid request" })
 
     try {
+        userId = userId.trim()
+        currency = plan.trim()
+
+
+
+        const joiSchema = Joi.object({
+            userId: Joi.string().required().min(7),
+            currency: Joi.number().required()
+        })
+        let validEntry = joiSchema.validate({ userId, currency })
+
+        if (!validEntry) return res.status(400).json({ message: "invalid request" })
+
         let user = await getUserById(userId)
         if (!user || user.length < 1) return res.status(404).json({ message: 'user not found' })
         let result = Promise.all([await portfolio.createPortfolio({ user: userId, currency, type: 'Btc' }), await portfolio.createPortfolio({ user: userId, currency, type: 'Usdt' })])
