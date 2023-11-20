@@ -1,4 +1,4 @@
-const person = require("../../models/dmin");
+import person from "../../models/dmin.js";
 
 const address = async (req, res) => {
   try {
@@ -8,4 +8,4 @@ const address = async (req, res) => {
   }
   if (admin) return res.json({ address: admin.Address });
 };
-module.exports = address;
+export default address;

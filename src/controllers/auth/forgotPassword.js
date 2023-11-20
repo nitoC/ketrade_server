@@ -1,11 +1,12 @@
-const crypto = require("crypto");
-const mongoose = require("mongoose");
-const nodemailer = require("nodemailer");
-const person = require("../../models/models");
-const url=require("url");
+import crypto from 'crypto';
+import mongoose from 'mongoose';
+import nodemailer from 'nodemailer';
+import person from '../../models/user.js';
+import { URL } from 'url';
+
 
 const forgotPassword = async (req, res) => {
-  const requrl = url.parse(req.header('Referer'),true)
+  const requrl = url.parse(req.header('Referer'), true)
   console.log(req.header('Referer'));
   console.log(requrl.protocol);
   console.log(requrl.host);
@@ -27,9 +28,9 @@ const forgotPassword = async (req, res) => {
         }
       })
       .clone();
-      if(user.length<1){
-        return res.json("no such user")
-      }console.log(user)
+    if (user.length < 1) {
+      return res.json("no such user")
+    } console.log(user)
 
     token = crypto.randomBytes(20).toString("hex");
     userUpdate = await person
@@ -74,4 +75,4 @@ const forgotPassword = async (req, res) => {
     }
   });
 };
-module.exports = forgotPassword;
+export default forgotPassword;

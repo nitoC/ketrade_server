@@ -1,31 +1,41 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const signup = require("../controllers/auth/signup");
-const deposit = require("../controllers/dashboard/deposit");
-const address = require("../controllers/dashboard/address");
-const withdraw = require("../controllers/dashboard/withdraw");
-const referral = require("../controllers/referral/referral");
-const gReferral = require("../controllers/referral/gReferral");
-const pending = require("../controllers/admin/admin");
-const signin = require("../controllers/auth/signin");
-const resetPassword = require("../controllers/auth/resetPassword");
-const forgotPassword = require("../controllers/auth/forgotPassword");
-const dashboard = require("../controllers/dashboard/dashboard");
+import express from 'express';
+// import bcrypt from 'bcryptjs';
+// import jwt from 'jsonwebtoken';
+import signup from '../controllers/auth/signup.js';
+import deposit from '../controllers/dashboard/deposit.js';
+import withdraw from '../controllers/dashboard/withdraw.js';
+import transaction from '../controllers/dashboard/getTransactions.js';
+// import gReferral from '../controllers/referral/gReferral.js';
+// import pending from '../controllers/admin/admin.js';
+import signin from '../controllers/auth/signin.js';
+import Authorize from '../middlewares/authorization.js';
+import refreshAccessToken from '../controllers/auth/refreshToken.js';
+import { createReferral, getReferrals } from '../controllers/dashboard/referral.js';
+import { createOrders, getOrders, getcompletedOrders } from '../controllers/dashboard/orders.js';
+// import resetPassword from '../controllers/auth/resetPassword.js';
+// import forgotPassword from '../controllers/auth/forgotPassword.js';
+// import dashboard from '../controllers/dashboard/dashboard.js';
+
 const router = express.Router();
 // all patch request or endpoints
-router.patch("/reset", resetPassword);
-router.patch("/withdraw", withdraw);
-router.patch("/deposit", deposit);
+//router.patch("/reset", resetPassword);
+//router.patch("/withdraw", withdraw);
 // all post request or endpoints
-router.post("/get-referral", gReferral);
-router.post("/forgotPassword", forgotPassword);
+router.post("/deposit", deposit);
+router.post("/withdraw", withdraw);
+router.post("/orders", createOrders);
+router.post("/refreshToken", refreshAccessToken);
+//router.post("/forgotPassword", forgotPassword);
 router.post("/register", signup);
-router.post("/referral",referral );
+router.post("/referrals", createReferral);
 router.post("/login", signin);
+router.post("/orders/", createOrders);
 // all get request or endpoints
-router.get("/address", address);
-router.get("/dashboard", dashboard);
-router.get("/pending", pending);
+router.get("/transactions/:userId", transaction);
+router.get("/referrals/:userId", getReferrals);
+router.get("/orders/:userId", getOrders);
+router.get("/orders/completed/:userId", getcompletedOrders);
+//router.get("/referrals/:userId", getReferrals);
+// router.get("/pending", pending);
 
-module.exports = router;
+export default router;
