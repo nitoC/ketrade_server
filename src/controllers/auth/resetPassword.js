@@ -1,6 +1,8 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const person = require("../../models/models");
+
+import mongoose from 'mongoose';
+import user from '../../models/user.js';
+import bcrypt from 'bcryptjs';
+
 
 const reset = async (req, res) => {
   let user;
@@ -39,4 +41,4 @@ const reset = async (req, res) => {
     res.json("token expired");
   }
 };
-module.exports = reset;
+export default reset;

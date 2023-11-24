@@ -1,25 +1,25 @@
-const person=require('../../models/models')
+const person = require('../../models/user')
 
 
-const pending=async (req,res)=>{
+const pending = async (req, res) => {
     let pendingDeposits
-    
-    try{
-        pendingDeposits=await person.find({"pending.deposit":{$gt:0}})
-    }catch(err){
-        if(err){
+
+    try {
+        pendingDeposits = await person.find({ "pending.deposit": { $gt: 0 } })
+    } catch (err) {
+        if (err) {
             console.log(err.message)
         }
 
     }
-    let filtered=pendingDeposits.map(({email,pending,balance,capital})=>{ 
+    let filtered = pendingDeposits.map(({ email, pending, balance, capital }) => {
         return {
-          email,
-          pending,
-          balance,
-          capital
+            email,
+            pending,
+            balance,
+            capital
         }
     })
     res.json(filtered)
 }
-module.exports=pending
+module.exports = pending
