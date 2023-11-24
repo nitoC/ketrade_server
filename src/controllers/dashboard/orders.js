@@ -8,8 +8,13 @@ import portfolio from "../../models/portfolio.js";
 
 const createOrders = async (req, res) => {
     let { userId, value, price, type, currency } = req.body;
-    console.log(userId, 'user id orders')
+    console.log(req.body, 'user id orders')
 
+    userId = userId.trim()
+    value = parseFloat(value);
+    price = parseFloat(price);
+    type = type.trim()
+    currency = currency.trim()
 
     try {
         const joiSchema = Joi.object({
@@ -26,11 +31,6 @@ const createOrders = async (req, res) => {
         if (!validEntry) return res.status(400).json({ message: "invalid request" })
 
 
-        userId = userId.trim()
-        value = parseFloat(value);
-        price = parseFloat(price);
-        type = type.trim()
-        currency = currency.trim()
 
         let user = await getUserById(userId)
         console.log(user, 'user')
@@ -47,7 +47,7 @@ const createOrders = async (req, res) => {
             return res.status(500).json({ message: portfolio.err })
         }
         console.log(portfolioData)
-        let portfolioFormat = portfolioData.toJSON()
+        let portfolioFormat = portfolioData[0].toJSON()
 
         let increment;
         increment = type === 'buy' ? value + portfolioFormat.value : portfolioFormat.value - value

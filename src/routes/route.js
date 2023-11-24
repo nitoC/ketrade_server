@@ -21,20 +21,19 @@ const router = express.Router();
 //router.patch("/reset", resetPassword);
 //router.patch("/withdraw", withdraw);
 // all post request or endpoints
-router.post("/deposit", deposit);
-router.post("/withdraw", withdraw);
-router.post("/orders", createOrders);
+router.post("/deposit", Authorize, deposit);
+router.post("/withdraw", Authorize, withdraw);
+router.post("/orders", Authorize, createOrders);
 router.post("/refreshToken", refreshAccessToken);
 //router.post("/forgotPassword", forgotPassword);
 router.post("/register", signup);
-router.post("/referrals", createReferral);
+router.post("/referrals", Authorize, createReferral);
 router.post("/login", signin);
-router.post("/orders/", createOrders);
 // all get request or endpoints
-router.get("/transactions/:userId", transaction);
-router.get("/referrals/:userId", getReferrals);
-router.get("/orders/:userId", getOrders);
-router.get("/orders/completed/:userId", getcompletedOrders);
+router.get("/transactions/:userId", Authorize, transaction);
+router.get("/referrals/:userId", Authorize, getReferrals);
+router.get("/orders/:userId", Authorize, getOrders);
+router.get("/orders/completed/:userId", Authorize, getcompletedOrders);
 //router.get("/referrals/:userId", getReferrals);
 // router.get("/pending", pending);
 

@@ -38,6 +38,7 @@ const refreshAccessToken = async (req, res) => {
         console.log(err)
         console.log(err.message)
         console.log(err.name)
+        if (err.name === 'TokenExpiredError') return res.status(401).json({ message: err.message })
         return res.status(500).json({ message: err.message })
     }
 }
