@@ -6,9 +6,6 @@ node_js:
 services:
   - docker
 
-services:
-  - docker
-
 # Pre-testing installs
 install:
   - echo "nothing needs to be installed"
@@ -21,7 +18,6 @@ script:
   - docker --version # print the version for logging
   - docker build -t keytrade .
   - docker tag keytrade nitocd/keytrade:latest
-  
 
 after_success:
   - docker images
